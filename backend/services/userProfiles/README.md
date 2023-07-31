@@ -4,9 +4,9 @@ En este repositorio, encontrarás diferentes proyectos desarrollados en React y 
 
 # Monolithic Style
 
-El estilo monolítico se refiere a la implementación de una aplicación o sistema en una única unidad lógica y cohesiva. En el código a continuación, el archivo `index.js` utiliza la arquitectura monolítica al conectar a MongoDB, definir rutas y crear el servidor express en una única aplicación.
+El estilo monolítico se refiere a la implementación de una aplicación o sistema en una única unidad lógica y cohesiva. En el código a continuación, el archivo `app.js` utiliza la arquitectura monolítica al conectar a MongoDB, definir rutas y crear el servidor express en una única aplicación.
 
-### index.js
+### app.js
 
 ```javascript
 
