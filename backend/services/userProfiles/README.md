@@ -367,3 +367,353 @@ const generateToken = (id) => {
 
 export default generateToken;
 ```
+
+# LABORATOTIO 10: Laboratorio 10: Codificación Legible (Clean Code)
+
+Clean Code, o "Código Limpio", es una filosofía y conjunto de prácticas de programación que busca producir software legible, fácil de entender, bien estructurado y mantenible. La teoría de Clean Code se basa en la idea de que el código es leído muchas más veces de lo que es escrito, y que el tiempo y esfuerzo dedicados a escribir un código limpio y claro valen la pena a largo plazo, ya que facilitan su mantenimiento y reducen la probabilidad de errores y fallos.
+
+## userController.js
+
+* Nombres significativos: Las variables y funciones tienen nombres descriptivos que indican claramente su propósito y función. Por ejemplo, authUser indica que esta función se utiliza para autenticar al usuario.
+* Funciones cortas y concisas: La función authUser es concisa y se enfoca en una tarea específica, lo que facilita su comprensión y mantenimiento.
+* Comentarios significativos: Se utilizan comentarios para describir el propósito de la función y la ruta de acceso a la que corresponde.
+* Separación de responsabilidades: La función authUser maneja la autenticación del usuario y la generación del token, lo que contribuye a una mejor organización del código.
+
+```javascript
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
+
+/*
+ * @desc    Auth user & get token
+ * @route   POST /api/users/login
+ * @access  Public
+ */
+const authUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+});
+
+/*
+ * @desc    Register a new user
+ * @route   POST /api/users/
+ * @access  Public
+ */
+const registerUser = asyncHandler(async (req, res) => {
+  const { username, password, firstname, lastname, email } = req.body;
+
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  const user = await User.create({
+    username,
+    password,
+    firstname,
+    lastname,
+    email,
+  });
+
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
+/*
+ * @desc    Get user profile
+ * @route   GET /api/users/profile
+ * @access  Private
+ */
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+/*
+ * @desc    Update user profile
+ * @route   PUT /api/users/profile
+ * @access  Private
+ */
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.username = req.body.username || user.username;
+    user.firstname = req.body.firstname || user.firstname;
+    user.lastname = req.body.lastname || user.lastname;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      firstname: updatedUser.firstname,
+      lastname: updatedUser.lastname,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+/*
+ * @desc    Get all users
+ * @route   GET /api/users
+ * @access Private/Admin
+*/
+const getUsers = asyncHandler(async (req, res) => {
+const users = await User.find({});
+res.json(users);
+});
+/*
+@desc Delete user
+@route DELETE /api/users/:id
+@access Private/Admin
+*/
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        await user.remove();
+    res.json({ message: "User removed" });
+    } else {
+    res.status(404);
+    throw new Error("User not found");
+    }
+    });
+    
+    /*
+    @desc Get user by ID
+    @route GET /api/users/:id
+    @access Private/Admin
+    */
+    const getUserById = asyncHandler(async (req, res) => {
+        const user = await User.findById(req.params.id).select("-password");
+        if (user) {
+        res.json(user);
+        } else {
+        res.status(404);
+        throw new Error("User not found");
+        }
+        });
+        
+        /*
+        @desc Update user
+        @route PUT /api/users/:id
+        @access Private/Admin
+        */
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        user.username = req.body.username || user.username;
+        user.firstname = req.body.firstname || user.firstname;
+        user.lastname = req.body.lastname || user.lastname;
+        user.email = req.body.email || user.email;
+        user.isAdmin = req.body.isAdmin || user.isAdmin;
+        const updatedUser = await user.save();
+        res.json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            firstname: updatedUser.firstname,
+            lastname: updatedUser.lastname,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+        });
+        } else {
+            res.status(404);
+            throw new Error("User not found");
+        }
+    });
+export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser };
+```
+
+## authMiddleware.js
+
+* Nombres significativos: Las variables y funciones tienen nombres descriptivos que indican claramente su propósito. Por ejemplo, protect y admin indican sus funciones de protección y administración respectivamente.
+* Funciones cortas y concisas: Las funciones protect y admin son concisas y se enfocan en tareas específicas, lo que facilita su comprensión y mantenimiento.
+* Separación de responsabilidades: La función protect maneja la verificación del token de autorización, mientras que admin verifica si el usuario tiene permisos de administrador, lo que contribuye a una mejor organización del código.
+
+```javascript
+import jwt from "jsonwebtoken";
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    try {
+      token = req.headers.authorization.split(" ")[1];
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = await User.findById(decoded.id).select("-password");
+
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+  }
+
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+});
+
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized as an admin");
+  }
+};
+
+export { protect, admin };
+```
+
+## userModel.js
+* Nombres significativos: Los nombres de los campos del esquema tienen significados claros, lo que facilita la comprensión de la estructura del modelo de usuario.
+
+```javascript
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    firstname: { type: String, required: true },
+   lastname: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    isAdmin: { type: Boolean, required: true, default: false },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
+```
+
+## userRoute.js
+* Nombres significativos: Los nombres de las rutas y funciones son descriptivos y fáciles de entender. Por ejemplo, authUser, registerUser, getUserProfile, etc., indican sus respectivas funciones.
+* Funciones cortas y concisas: Cada función en el archivo se enfoca en una tarea específica, lo que facilita la lectura y el mantenimiento del código.
+* Comentarios significativos: Se utilizan comentarios para describir el propósito de cada ruta y función.
+
+```javascript
+import jwt from "jsonwebtoken";
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
+
+export default generateToken;
+```
+
+## generateToken.js
+
+* Nombres significativos: El nombre generateToken indica claramente que esta función se utiliza para generar un token de autenticación.
+
+```javascript
+import jwt from "jsonwebtoken";
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
+
+export default generateToken;
+```
+
+## app.js
+
+* Nombres significativos: Los nombres de las variables y funciones son descriptivos y reflejan su propósito. Por ejemplo, app, userRoute, PORT, etc.
+* Funciones cortas y concisas: La función principal del servidor es concisa y se centra en la configuración y el enrutamiento del servidor.
+* Separación de responsabilidades: Las rutas se manejan mediante el uso de userRoute, lo que ayuda a mantener una estructura organizada del código.
+
+```javascript
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import userRoute from "./routes/userRoute.js";
+
+dotenv.config();
+
+connectDB();
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
+app.use("/api/users", userRoute);
+
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
