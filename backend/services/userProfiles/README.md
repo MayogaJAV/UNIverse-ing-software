@@ -1,4 +1,4 @@
-# LABORATORIO 09
+# LABORATORIO 09: Estilos de Programación
 
 En este repositorio, encontrarás diferentes proyectos desarrollados en React y MongoDB, cada uno de ellos implementando un estilo de programación específico. A continuación, se describen los estilos utilizados en cada código:
 
