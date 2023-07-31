@@ -368,7 +368,7 @@ const generateToken = (id) => {
 export default generateToken;
 ```
 
-# LABORATOTIO 10: Laboratorio 10: Codificación Legible (Clean Code)
+# LABORATORIO 10: Codificación Legible (Clean Code)
 
 Clean Code, o "Código Limpio", es una filosofía y conjunto de prácticas de programación que busca producir software legible, fácil de entender, bien estructurado y mantenible. La teoría de Clean Code se basa en la idea de que el código es leído muchas más veces de lo que es escrito, y que el tiempo y esfuerzo dedicados a escribir un código limpio y claro valen la pena a largo plazo, ya que facilitan su mantenimiento y reducen la probabilidad de errores y fallos.
 
