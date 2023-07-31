@@ -39,7 +39,7 @@ app.listen(PORT, () => {
 });
 ```
 
-2. **Cook Book Style**
+# Cook Book Style
 
 El estilo `Cook Book` se enfoca en separar cada función por su funcionalidad específica y reutilizarlas en diferentes rutas o componentes. En el siguiente código, el controlador `UserController.js` muestra este estilo al definir funciones separadas para autenticar usuarios, registrar nuevos usuarios y obtener detalles de usuarios.
 
@@ -241,7 +241,7 @@ const updateUser = asyncHandler(async (req, res) => {
     });
 export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser };
 ```
-3. **Pipeline Style**
+# Pipeline Style
 
 El estilo `Pipeline` implica ejecutar múltiples funciones en un orden específico, encadenando el procesamiento para lograr un resultado deseado. En el siguiente código, el middleware `AuthMiddleware.js` implementa este estilo al ejecutar funciones de autenticación y autorización de usuarios en un orden secuencial.
 
@@ -289,7 +289,7 @@ const admin = (req, res, next) => {
 export { protect, admin };
 ```
 
-4. **Thing Style**
+# Thing Style
 
 El estilo `Thing` se refiere a la definición de estructura y comportamiento de una entidad en una clase o módulo separado. En el siguiente código, el modelo de datos `UserModel.js` muestra este estilo al definir la estructura y comportamiento de la entidad de usuario en una clase.
 
@@ -316,7 +316,7 @@ const User = mongoose.model("User", userSchema);
 
 export default User;
 ```
-5. **Persistent Tables Style**
+# Persistent Tables Style
 El estilo `Persistent Tables` se refiere a la implementación de rutas y componentes en React que muestran tablas o elementos persistentes en la interfaz. En el siguiente código, el archivo `app.js` implementa este estilo al definir rutas de React y renderizar tablas de usuarios y otros elementos persistentes en la interfaz.
 
 ### app.js
@@ -351,7 +351,7 @@ app.listen(PORT, () => {
 });
 ```
 
-6. **Map-Reduce Style**
+# Map-Reduce Style
 El estilo `Map-Reduce` implica el uso de funciones de mapeo y reducción para procesar datos o generar resultados. En el siguiente código, el archivo `generateToken.js` sigue este estilo al utilizar una función de mapeo para generar tokens de autenticación.
 
 ### generateToken.js
