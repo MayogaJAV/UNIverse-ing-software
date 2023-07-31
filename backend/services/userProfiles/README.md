@@ -1,8 +1,8 @@
-# LABORATOTIO 09
+# LABORATORIO 09
 
 En este repositorio, encontrarás diferentes proyectos desarrollados en React y MongoDB, cada uno de ellos implementando un estilo de programación específico. A continuación, se describen los estilos utilizados en cada código:
 
-1. **Monolithic Style**
+# Monolithic Style
 
 El estilo monolítico se refiere a la implementación de una aplicación o sistema en una única unidad lógica y cohesiva. En el código a continuación, el archivo `index.js` utiliza la arquitectura monolítica al conectar a MongoDB, definir rutas y crear el servidor express en una única aplicación.
 
