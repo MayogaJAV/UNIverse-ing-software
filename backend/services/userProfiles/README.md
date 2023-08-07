@@ -1007,6 +1007,17 @@ export { protect, admin };
 ```
 ## generateToken.js (Generación de tokens JWT)
 * Principio de Responsabilidad Única (SRP): La función generateToken en generateToken.js sigue el principio SRP al tener la única responsabilidad de generar tokens JWT.
+```javascript
+import jwt from "jsonwebtoken";
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
+
+export default generateToken;
+```
 ## userRoute.js (Rutas para las operaciones de usuario)
 * Principio de Responsabilidad Única (SRP): Cada ruta y su controlador correspondiente en userRoute.js aplican el principio SRP al manejar una única operación relacionada con los usuarios, como autenticación, registro, obtención de perfiles, entre otras.
 ```javascript
@@ -1021,5 +1032,34 @@ const generateToken = (id) => {
 export default generateToken;
 ```
 * Principio de Abierto/Cerrado (OCP): Las rutas y controladores en este archivo cumplen con el principio OCP al permitir la extensión para agregar nuevas operaciones sin modificar el código existente.
-## index.js (Configuración y ejecución del servidor)
+## app.js (Configuración y ejecución del servidor)
 * Principio de Responsabilidad Única (SRP): El archivo index.js sigue el principio SRP al ser responsable de la configuración y ejecución del servidor, manteniendo así una única responsabilidad.
+```javascript
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import userRoute from "./routes/userRoute.js";
+
+dotenv.config();
+
+connectDB();
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
+app.use("/api/users", userRoute);
+
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
