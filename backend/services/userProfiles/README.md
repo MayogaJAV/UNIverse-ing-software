@@ -741,6 +741,27 @@ Estos principios ayudan a crear código más limpio, modular y fácil de mantene
 # Aplicación de Principios SOLID en el Código
 ## userModel.js (Definición de esquema de usuario)
 * Principio de Responsabilidad Única (SRP): El archivo userModel.js cumple con el principio SRP al definir exclusivamente la estructura del modelo de usuario, separando así la responsabilidad de la definición del esquema del resto de la aplicación.
+```javascript
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    firstname: { type: String, required: true },
+   lastname: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    isAdmin: { type: Boolean, required: true, default: false },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
+```
 ## userController.js (Controladores para operaciones de usuario)
 * Principio de Responsabilidad Única (SRP): Cada controlador en el archivo userController.js sigue el principio SRP al encargarse de una única operación relacionada con el usuario. Por ejemplo, authUser se encarga de la autenticación de usuarios, registerUser de la creación de nuevos usuarios, y así sucesivamente.
 * Principio de Abierto/Cerrado (OCP): Los controladores en este archivo cumplen con el principio OCP al permitir la extensión para agregar nuevas operaciones sin modificar el código existente. Esto se logra mediante la adición de nuevos controladores y rutas sin afectar los existentes.
@@ -989,25 +1010,15 @@ export { protect, admin };
 ## userRoute.js (Rutas para las operaciones de usuario)
 * Principio de Responsabilidad Única (SRP): Cada ruta y su controlador correspondiente en userRoute.js aplican el principio SRP al manejar una única operación relacionada con los usuarios, como autenticación, registro, obtención de perfiles, entre otras.
 ```javascript
-import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema(
-  {
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    firstname: { type: String, required: true },
-   lastname: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    isAdmin: { type: Boolean, required: true, default: false },
-  },
-  {
-    timestamps: true,
-  }
-);
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export default generateToken;
 ```
 * Principio de Abierto/Cerrado (OCP): Las rutas y controladores en este archivo cumplen con el principio OCP al permitir la extensión para agregar nuevas operaciones sin modificar el código existente.
 ## index.js (Configuración y ejecución del servidor)
