@@ -717,3 +717,23 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 ```
+
+# LABORATORIO 11: Aplicación de Principios SOLID en el Código
+Los `Principios SOLID` son un conjunto de cinco directrices de diseño de software que buscan mejorar la mantenibilidad, extensibilidad y comprensión del código. Estos principios fueron propuestos por Robert C. Martin y son una referencia fundamental para escribir código limpio y de calidad. A continuación, se describen brevemente cada uno de los principios:
+
+## Principio de Responsabilidad Única (SRP - Single Responsibility Principle): 
+Este principio establece que una clase o módulo debe tener una única razón para cambiar. En otras palabras, una clase debe tener una única responsabilidad. Esto mejora la cohesión y facilita el mantenimiento del código al reducir la probabilidad de efectos secundarios no deseados.
+
+## Principio de Abierto/Cerrado (OCP - Open/Closed Principle): 
+El principio OCP dicta que una entidad de software (clase, módulo, función) debe estar abierta para la extensión pero cerrada para la modificación. En lugar de modificar el código existente, se deben agregar nuevas funcionalidades mediante extensiones.
+
+## Principio de Sustitución de Liskov (LSP - Liskov Substitution Principle): 
+Este principio establece que los objetos de una clase derivada deben poder sustituirse por objetos de la clase base sin afectar la integridad del programa. En otras palabras, una subclase debe ser reemplazable por su clase base sin cambiar el comportamiento esperado.
+
+## Principio de Segregación de la Interfaz (ISP - Interface Segregation Principle): 
+El ISP propone que una interfaz no debe forzar a las clases que la implementan a depender de métodos que no utilizan. En lugar de tener interfaces genéricas, se deben crear interfaces específicas para cada contexto.
+
+## Principio de Inversión de Dependencia (DIP - Dependency Inversion Principle): 
+El DIP establece que los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones. Además, las abstracciones no deben depender de los detalles; los detalles deben depender de las abstracciones.
+
+Estos principios ayudan a crear código más limpio, modular y fácil de mantener. A continuación, se detalla cómo se aplican algunos de estos principios en los códigos proporcionados:
