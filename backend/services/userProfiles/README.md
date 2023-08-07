@@ -737,3 +737,20 @@ El ISP propone que una interfaz no debe forzar a las clases que la implementan a
 El DIP establece que los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones. Además, las abstracciones no deben depender de los detalles; los detalles deben depender de las abstracciones.
 
 Estos principios ayudan a crear código más limpio, modular y fácil de mantener. A continuación, se detalla cómo se aplican algunos de estos principios en los códigos proporcionados:
+
+# Aplicación de Principios SOLID en el Código
+## userModel.js (Definición de esquema de usuario)
+* Principio de Responsabilidad Única (SRP): El archivo userModel.js cumple con el principio SRP al definir exclusivamente la estructura del modelo de usuario, separando así la responsabilidad de la definición del esquema del resto de la aplicación.
+## userController.js (Controladores para operaciones de usuario)
+* Principio de Responsabilidad Única (SRP): Cada controlador en el archivo userController.js sigue el principio SRP al encargarse de una única operación relacionada con el usuario. Por ejemplo, authUser se encarga de la autenticación de usuarios, registerUser de la creación de nuevos usuarios, y así sucesivamente.
+* Principio de Abierto/Cerrado (OCP): Los controladores en este archivo cumplen con el principio OCP al permitir la extensión para agregar nuevas operaciones sin modificar el código existente. Esto se logra mediante la adición de nuevos controladores y rutas sin afectar los existentes.
+## authMiddleware.js (Middlewares de autenticación)
+* Principio de Responsabilidad Única (SRP): El middleware de autenticación en authMiddleware.js cumple con el principio SRP al enfocarse únicamente en la verificación de autenticación a través de tokens.
+* Principio de Sustitución de Liskov (LSP): Aunque no es evidente en el código proporcionado, el principio LSP se aplica si el middleware de autenticación puede sustituirse por otro middleware sin alterar el comportamiento esperado.
+## generateToken.js (Generación de tokens JWT)
+* Principio de Responsabilidad Única (SRP): La función generateToken en generateToken.js sigue el principio SRP al tener la única responsabilidad de generar tokens JWT.
+## userRoute.js (Rutas para las operaciones de usuario)
+* Principio de Responsabilidad Única (SRP): Cada ruta y su controlador correspondiente en userRoute.js aplican el principio SRP al manejar una única operación relacionada con los usuarios, como autenticación, registro, obtención de perfiles, entre otras.
+* Principio de Abierto/Cerrado (OCP): Las rutas y controladores en este archivo cumplen con el principio OCP al permitir la extensión para agregar nuevas operaciones sin modificar el código existente.
+## index.js (Configuración y ejecución del servidor)
+* Principio de Responsabilidad Única (SRP): El archivo index.js sigue el principio SRP al ser responsable de la configuración y ejecución del servidor, manteniendo así una única responsabilidad.
