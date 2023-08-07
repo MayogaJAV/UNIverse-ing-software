@@ -943,10 +943,72 @@ export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, de
 ## authMiddleware.js (Middlewares de autenticación)
 * Principio de Responsabilidad Única (SRP): El middleware de autenticación en authMiddleware.js cumple con el principio SRP al enfocarse únicamente en la verificación de autenticación a través de tokens.
 * Principio de Sustitución de Liskov (LSP): Aunque no es evidente en el código proporcionado, el principio LSP se aplica si el middleware de autenticación puede sustituirse por otro middleware sin alterar el comportamiento esperado.
+```javascript
+import jwt from "jsonwebtoken";
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+
+const protect = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    try {
+      token = req.headers.authorization.split(" ")[1];
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      req.user = await User.findById(decoded.id).select("-password");
+
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+  }
+
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+});
+
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized as an admin");
+  }
+};
+
+export { protect, admin };
+```
 ## generateToken.js (Generación de tokens JWT)
 * Principio de Responsabilidad Única (SRP): La función generateToken en generateToken.js sigue el principio SRP al tener la única responsabilidad de generar tokens JWT.
 ## userRoute.js (Rutas para las operaciones de usuario)
 * Principio de Responsabilidad Única (SRP): Cada ruta y su controlador correspondiente en userRoute.js aplican el principio SRP al manejar una única operación relacionada con los usuarios, como autenticación, registro, obtención de perfiles, entre otras.
+```javascript
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    firstname: { type: String, required: true },
+   lastname: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    isAdmin: { type: Boolean, required: true, default: false },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+
+export default User;
+```
 * Principio de Abierto/Cerrado (OCP): Las rutas y controladores en este archivo cumplen con el principio OCP al permitir la extensión para agregar nuevas operaciones sin modificar el código existente.
 ## index.js (Configuración y ejecución del servidor)
 * Principio de Responsabilidad Única (SRP): El archivo index.js sigue el principio SRP al ser responsable de la configuración y ejecución del servidor, manteniendo así una única responsabilidad.
