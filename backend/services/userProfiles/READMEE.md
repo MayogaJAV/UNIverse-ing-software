@@ -330,3 +330,176 @@ const FollowersModal = ({ modalOpened, setModalOpened }) => {
       overlayColor={
         theme.colorScheme === "dark"
           ? theme
+
+.colors.dark[9]
+          : theme.colors.gray[2]
+      }
+      overlayOpacity={0.55}
+      overlayBlur={3}
+      size="55%"
+      opened={modalOpened}
+      onClose={() => setModalOpened(false)}
+    >
+
+    <FollowersCard location='modal'/>
+    </Modal>
+  );
+};
+
+export default FollowersModal;
+```
+
+**Monolith (Monolito):** El componente `FollowersModal` no es un monolito en sí mismo, ya que está relacionado con la representación de modales y la interacción con la biblioteca `@mantine/core`.
+
+**Cookbook (Recetario):** Utiliza la biblioteca `@mantine/core` para establecer propiedades del modal y contiene un componente `FollowersCard` predefinido.
+
+**Hollywood:** Delega la lógica del modal y su apertura/cierre en la biblioteca `@mantine/core` y en el componente `FollowersCard`.
+
+**Abstract Things (Cosas Abstractas):** El componente `FollowersModal` encapsula la lógica para mostrar un modal y utiliza la abstracción proporcionada por la biblioteca `@mantine/core`.
+
+**Infinite Mirror (Espejo Infinito):** No hay una replicación clara de componentes en este código.
+
+**Pipeline (Tubería):** No se observa un flujo de datos dividido en pasos interconectados en este fragmento de código.
+
+**Code Golf (Golf de código):** El código es conciso y utiliza propiedades predefinidas de la biblioteca `@mantine/core`.
+
+**The One (El Elegido):** El componente `FollowersModal` podría considerarse el "Elegido" para representar la interacción con modales en la aplicación.
+
+**Letterbox:** No se observa comunicación a través de mensajes entregados en "buzones" designados.
+
+**Closed Maps (Mapas Cerrados):** No hay una restricción estricta en las interacciones entre diferentes partes del componente.
+
+---
+
+### Código 5: `Post`
+
+```jsx
+import React, { useState } from "react";
+import "./Post.css";
+import Comment from "../../img/comment.png";
+import Share from "../../img/share.png";
+import Heart from "../../img/like.png";
+import NotLike from "../../img/notlike.png";
+import { likePost } from "../../api/PostsRequests";
+import { useSelector } from "react-redux";
+
+const Post = ({ data }) => {
+  const { user } = useSelector((state) => state.authReducer.authData);
+  const [liked, setLiked] = useState(data.likes.includes(user._id));
+  const [likes, setLikes] = useState(data.likes.length);
+
+  const handleLike = () => {
+    likePost(data._id, user._id);
+    setLiked((prev) => !prev);
+    liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
+  };
+
+  return (
+    <div className="Post">
+      <img
+        src={data.image ? process.env.REACT_APP_PUBLIC_FOLDER + data.image : ""}
+        alt=""
+      />
+
+      <div className="postReact">
+        <img
+          src={liked ? Heart : NotLike}
+          alt=""
+          style={{ cursor: "pointer" }}
+          onClick={handleLike}
+        />
+        <img src={Comment} alt="" />
+        <img src={Share} alt="" />
+      </div>
+
+      <span style={{ color: "var(--gray)", fontSize: "12px" }}>
+        {likes} likes
+      </span>
+      <div className="detail">
+        <span>
+          <b>{data.name} </b>
+        </span>
+        <span>{data.desc}</span>
+      </div>
+    </div>
+  );
+};
+
+export default Post;
+```
+
+**Monolith (Monolito):** El componente `Post` no es un monolito en sí mismo, ya que representa un fragmento específico de la interfaz de usuario relacionado con la representación de publicaciones y la interacción de "me gusta".
+
+**Cookbook (Recetario):** Utiliza imágenes predefinidas para representar elementos visuales como iconos y muestra la cantidad de "me gusta" y comentarios.
+
+**Hollywood:** No se observa una inversión de control clara en este código.
+
+**Abstract Things (Cosas Abstractas):** El componente `Post` encapsula la lógica para manejar "me gusta" y la representación visual de la publicación.
+
+**Infinite Mirror (Espejo Infinito):** No hay una replicación clara de componentes en este código.
+
+**Pipeline (Tubería):** No se observa un flujo de datos dividido en pasos interconectados en este fragmento de código.
+
+**Code Golf (Golf de código):** El código es relativamente conciso y utiliza operaciones condicionales para manejar el estado de "me gusta".
+
+**The One (El Elegido):** El componente `Post` podría considerarse el "Elegido" para representar la interacción de "me gusta" y la visualización de publicaciones en la aplicación.
+
+**Letterbox:** No se observa comunicación a través de mensajes entregados en "buzones" designados.
+
+**Closed Maps (Mapas Cerrados):** No hay una restricción estricta en las interacciones entre diferentes partes del componente.
+
+---
+
+### Código 6: `NavIcons`
+
+```jsx
+import React from "react";
+import { UilSetting } from "@iconscout/react-unicons";
+import { Link } from "react-router-dom";
+import "./Navicons.css";
+import { AiFillHome, AiFillBell } from 'react-icons/ai';
+import { BsFillGearFill, BsFillChat
+
+DotsFill } from 'react-icons/bs';
+
+const NavIcons = () => {
+    return (
+        <div className="navIcons">
+            <Link to="../home">
+                <AiFillHome className="unsa"/>
+            </Link>
+            <BsFillGearFill className="unsa"/>
+            <AiFillBell className="unsa"/>
+            <Link to="../chat">
+                <BsFillChatDotsFill className="unsa"/>
+            </Link>
+        </div>
+    );
+};
+
+export default NavIcons;
+```
+
+**Monolith (Monolito):** El componente `NavIcons` no es un monolito en sí mismo, ya que representa un fragmento específico de la interfaz de usuario relacionado con los íconos de navegación.
+
+**Cookbook (Recetario):** Utiliza íconos predefinidos de bibliotecas como `react-icons` y `@iconscout/react-unicons` para representar íconos de navegación.
+
+**Hollywood:** No se observa una inversión de control clara en este código.
+
+**Abstract Things (Cosas Abstractas):** El componente `NavIcons` encapsula la lógica para mostrar íconos de navegación y utiliza componentes abstractos para representar elementos visuales.
+
+**Infinite Mirror (Espejo Infinito):** No hay una replicación clara de componentes en este código.
+
+**Pipeline (Tubería):** No se observa un flujo de datos dividido en pasos interconectados en este fragmento de código.
+
+**Code Golf (Golf de código):** El código es relativamente conciso y utiliza componentes de biblioteca para representar íconos de navegación.
+
+**The One (El Elegido):** El componente `NavIcons` podría considerarse el "Elegido" para representar la parte de la interfaz de usuario relacionada con los íconos de navegación en la aplicación.
+
+**Letterbox:** No se observa comunicación a través de mensajes entregados en "buzones" designados.
+
+**Closed Maps (Mapas Cerrados):** No hay una restricción estricta en las interacciones entre diferentes partes del componente.
+
+---
+
+Espero que esta presentación en formato Markdown sea lo que estás buscando. Si tienes alguna otra pregunta o necesitas más información, ¡no dudes en preguntar!
